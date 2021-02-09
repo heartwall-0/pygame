@@ -1,7 +1,7 @@
 '''
 Author: your name
 Date: 2021-02-08 21:40:20
-LastEditTime: 2021-02-09 21:42:25
+LastEditTime: 2021-02-09 21:40:10
 LastEditors: Please set LastEditors
 Description: In User Settings Edit
 FilePath: \pygame\test.py
@@ -17,7 +17,7 @@ class AlienInvasion:
         self.screen = pygame.display.set_mode((1200, 800))
         pygame.display.set_caption("Alien Invasion")
     
-        self.bg_color = (230, 230, 230)
+    self.bg_color = (230, 230, 230)
 
     def run_game(self):
 
@@ -25,8 +25,6 @@ class AlienInvasion:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
-            
-            self.screen.fill(self.bg_color)
             pygame.display.flip()
 
 if __name__ == '__main__':
