@@ -41,8 +41,6 @@ from bullet import Bullet
 from alien import Alien
 from time import sleep
 from game_stats import GameStats
-from button import Button
-from scoreboard import Scoreboard
 
 class AlienInvasion:
 
@@ -57,25 +55,22 @@ class AlienInvasion:
         pygame.display.set_caption("Alien Invasion")
 
         self.stats = GameStats(self)
-        self.sb = Scoreboard(self)
+
 
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
 
         self.aliens = pygame.sprite.Group()
         self._create_fleet()
-        self.play_button = Button(self, "Play")
 
     def run_game(self):
 
         while True:
             self._check_events()
-
-            if self.stats.game_active:
-                self.ship.update()
-                self._update_bullets()
-                self._update_aliens()
-
+            self.ship.update()
+            self._update_bullets()
+            self._update_aliens()
+            print(len(self.bullets))
             self._update_screen()
 
 
@@ -87,28 +82,8 @@ class AlienInvasion:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_pos = pygame.mouse.get_pos()
-                self._check_play_button(mouse_pos)
 
-    def _check_play_button(self, mouse_pos):
-        button_clicked = self.play_button.rect.collidepoint(mouse_pos)
-        if button_clicked and not self.stats.game_active:
-            self.settings.initialize_dynamic_settings()
-
-            self.stats.reset_stats()
-            self.stats.game_active = True
-            self.sb.prep_score()
-            self.sb.prep_level()
-            self.sb.prep_ships()
-
-            self.aliens.empty()
-            self.bullets.empty()
-
-            self._create_fleet()
-            self.ship.center_ship()
-            pygame.mouse.set_visible(False)
- 
+#todo 响应按键  
     def _check_keydown_events(self, event):
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = True
@@ -118,7 +93,7 @@ class AlienInvasion:
             sys.exit()
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
-
+#todo 松开按键
     def _check_keyup_events(self, event):
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = False
@@ -140,19 +115,9 @@ class AlienInvasion:
     def _check_bullet_alien_collisions(self):
         collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
 
-        if collisions:
-            for aliens in collisions.values():
-                self.stats.score += self.settings.alien_points * len(aliens)
-            self.sb.prep_score()
-            self.sb.check_high_score()
-
         if not self.aliens:
             self.bullets.empty()
             self._create_fleet()
-            self.settings.increase_speed()
-
-            self.stats.level += 1
-            self.sb.prep_level()
 
     def _create_fleet(self):
         alien = Alien(self)
@@ -194,25 +159,18 @@ class AlienInvasion:
 
         if pygame.sprite.spritecollideany(self.ship, self.aliens):
             self._ship_hit()
-        
-        self._check_aliens_bottom()
 
     
     def _ship_hit(self):
-        if self.stats.ships_left > 0:
 
-            self.stats.ships_left -= 1
-            self.sb.prep_ships()
-            self.aliens.empty()
-            self.bullets.empty()
+        self.stats.ships_left -= 1
+        self.aliens.empty()
+        self.bullets.empty()
 
-            self._create_fleet()
-            self.ship.center_ship()
+        self._create_fleet()
+        self.ship.center_ship()
 
-            sleep(0.5)
-        else:
-            self.stats.game_active = False
-            pygame.mouse.set_visible(True)
+        sleep(0.5)
 
     def _check_aliens_bottom(self):
         screen_rect = self.screen.get_rect()
@@ -228,12 +186,6 @@ class AlienInvasion:
             bullet.draw_bullet()
         
         self.aliens.draw(self.screen)
-
-        self.sb.show_score()
-
-        if not self.stats.game_active:
-            self.play_button.draw_button()
-
         pygame.display.flip()
 
 if __name__ == '__main__':

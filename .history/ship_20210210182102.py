@@ -1,7 +1,7 @@
 '''
 Author: your name
 Date: 2021-02-10 07:55:21
-LastEditTime: 2021-02-10 18:22:10
+LastEditTime: 2021-02-10 18:21:02
 LastEditors: Please set LastEditors
 Description: In User Settings Edit
 FilePath: \pygame\ship.py
@@ -9,11 +9,8 @@ FilePath: \pygame\ship.py
 import pygame
 from pygame.sprite import Sprite
 
-class Ship(Sprite):
-    
+class Ship:
     def __init__(self, ai_game):
-        super().__init__()
-
         self.screen = ai_game.screen
         self.settings = ai_game.settings
         self.screen_rect = ai_game.screen.get_rect()

@@ -1,7 +1,7 @@
 '''
 Author: 零到正无穷
 Date: 2021-02-10 07:44:50
-LastEditTime: 2021-02-10 17:59:33
+LastEditTime: 2021-02-10 17:44:27
 LastEditors: Please set LastEditors
 Description: In User Settings Edit
 FilePath: \pygame\settings.py
@@ -28,7 +28,7 @@ class Settings:
 
         self.ship_limit = 3
 
-        self.speedup_scale = 1.5
+        self.speedup_scale = 1.1
         self.initialize_dynamic_settings()
 
     def initialize_dynamic_settings(self):
@@ -45,8 +45,5 @@ class Settings:
         self.ship_speed *= self.speedup_scale
         self.bullet_speed *= self.speedup_scale
         self.alien_speed *= self.speedup_scale
-
-        self.alien_points = int(self.alien_points * self.score_scale)
-        print(self.alien_points)
 
          
